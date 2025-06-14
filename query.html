@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>打卡紀錄查詢</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body class="querypage">
+  <div class="glass-container query-page">
+    <h1 class="titleRecord">📋 打卡紀錄</h1>
+    <div id="record-list"></div>
+  </div>
+
+  <script src="lang.js"></script>
+  
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    applySavedLang();  // ✅ 只套用已儲存語言，不自動切換
+  });
+</script>
+  
+  <script type="module">
+    import { loadRecords } from './app.js';
+    window.addEventListener('DOMContentLoaded', loadRecords);
+  </script>
+</body>
+</html>

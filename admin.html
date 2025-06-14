@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>刪除所有打卡資料</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: "Arial", sans-serif;
+      background-color: #ffffff;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      text-align: center;
+    }
+
+    h1 {
+      font-size: 6vw;
+      margin-bottom: 40px;
+      color: #000;
+    }
+
+    #clear-btn {
+      font-size: 5vw;
+      padding: 20px 40px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 12px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+    }
+
+    #clear-btn:active {
+      transform: scale(0.97);
+    }
+  </style>
+</head>
+<body>
+  <h1>⚠️ 管理功能：清除所有打卡資料</h1>
+  <button id="clear-btn">🗑️ 一鍵清除所有資料</button>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
+    import {
+      getFirestore,
+      collection,
+      getDocs,
+      deleteDoc,
+      doc
+    } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyBSLCVS3oHZ6_M_xoPMvH2ihsbYUgfdTSo",
+      authDomain: "pwa-checkin-4dbe1.firebaseapp.com",
+      projectId: "pwa-checkin-4dbe1",
+      storageBucket: "pwa-checkin-4dbe1.appspot.com",
+      messagingSenderId: "467417750707",
+      appId: "1:467417750707:web:1c165c3c6353db694c0d3f"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    document.getElementById("clear-btn").addEventListener("click", async () => {
+      const confirmDelete = confirm("⚠️ 確定要刪除所有打卡資料嗎？此操作無法復原！");
+      if (!confirmDelete) return;
+
+      const snapshot = await getDocs(collection(db, "attendance"));
+      const deletions = snapshot.docs.map(docSnap => deleteDoc(doc(db, "attendance", docSnap.id)));
+      await Promise.all(deletions);
+      alert("✅ 所有打卡資料已刪除！");
+    });
+  </script>
+</body>
+</html>
