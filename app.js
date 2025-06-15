@@ -12,12 +12,12 @@ import {
 } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyDNDdqSsZSoy-gN-MGDyjAoTSP_dWq5QTw",
-  authDomain: "pwa-checkin-95888.firebaseapp.com",
-  projectId: "pwa-checkin-95888",
-  storageBucket: "pwa-checkin-95888.firebasestorage.app",
-  messagingSenderId: "329626172975",
-  appId: "1:329626172975:web:05480744a575a213de90da"
+  apiKey: "AIzaSyBW9mkBdYx-T0NA9J-gN231u16j_ypU8qY",
+  authDomain: "checkin-9e753.firebaseapp.com",
+  projectId: "checkin-9e753",
+  storageBucket: "checkin-9e753.firebasestorage.app",
+  messagingSenderId: "29864474124",
+  appId: "1:29864474124:web:73f05cacf164de715d6029"
 };
 
 const app = initializeApp(firebaseConfig);
