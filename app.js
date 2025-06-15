@@ -52,9 +52,13 @@ const translations = {
 
 export async function handlePunch(type) {
   let name = localStorage.getItem("username");
+  let employeeId = null; // ✅ 預先宣告員編變數
 
+  const lang = localStorage.getItem("lang") || "zh";
+  const t = translations[lang];
+
+  // ✅ 若無姓名，提示輸入
   if (!name || name.trim() === "") {
-    const lang = localStorage.getItem("lang") || "zh";
     const promptText = lang === "id" ? "Silakan masukkan nama Anda:" : "請輸入您的姓名：";
     const errorText = lang === "id"
       ? "⚠️ Masukkan nama yang valid sebelum absen!"
@@ -68,13 +72,23 @@ export async function handlePunch(type) {
     localStorage.setItem("username", name.trim());
   }
 
+  // ✅ 查詢員工編號（不論是否剛剛輸入的名字）
+  const q = query(collection(db, "staffList"), where("name", "==", name.trim()));
+  const snapshot = await getDocs(q);
+  if (snapshot.empty) {
+    alert(lang === "id"
+      ? "⚠️ Nama ini tidak ditemukan dalam daftar staf. Hubungi administrator."
+      : "⚠️ 查無此姓名的員工編號，請聯絡管理員！");
+    return;
+  }
+  employeeId = snapshot.docs[0].data().id;
+
+  // ✅ 取得 GPS
   if (!navigator.geolocation) {
     document.getElementById("status").innerText = "❌ 無法取得 GPS 位置。";
     return;
   }
 
-  const lang = localStorage.getItem("lang") || "zh";
-  const t = translations[lang];
   document.getElementById("status").innerHTML = t.processing;
 
   navigator.geolocation.getCurrentPosition(async (pos) => {
@@ -98,6 +112,7 @@ export async function handlePunch(type) {
     try {
       await addDoc(collection(db, "attendance"), {
         name,
+        employeeId, // ✅ 寫入員工編號
         type,
         timestamp: serverTimestamp(),
         gps_status: t.gps_ok,
